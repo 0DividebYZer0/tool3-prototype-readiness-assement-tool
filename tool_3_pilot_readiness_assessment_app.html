@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tool 3 Pilot and Product Readiness Assessment</title>
+  <style>
+    :root {
+      --bg: #f2f6fb;
+      --card: rgba(255, 255, 255, 0.96);
+      --ink: #16213d;
+      --muted: #56637a;
+      --line: #cbd5e1;
+      --brand: #0f3d66;
+      --brand-2: #2d6a9f;
+      --accent: #f0b24d;
+      --good: #167a4b;
+      --warn: #b86f12;
+      --bad: #b43b34;
+      --pending: #64748b;
+      --soft: #e8eef6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Aptos, "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      line-height: 1.45;
+      background:
+        radial-gradient(circle at top right, rgba(240, 178, 77, 0.22), transparent 22%),
+        linear-gradient(180deg, #edf4fb 0%, #f7fafc 100%);
+    }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(140deg, #0f3d66 0%, #205887 60%, #2e6fa5 100%);
+      color: #fff;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 18px 48px rgba(15, 61, 102, 0.24);
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 6px 0;
+      max-width: 860px;
+      opacity: 0.96;
+    }
+
+    .privacy-note {
+      margin-top: 16px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.8fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(203, 213, 225, 0.9);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      color: var(--brand);
+      font-size: 23px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      color: var(--brand);
+      font-size: 17px;
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 16px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-size: 16px;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--brand-2);
+      box-shadow: 0 0 0 3px rgba(45, 106, 159, 0.14);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #edf5fd;
+      color: var(--brand);
+      text-align: left;
+    }
+
+    .mini {
+      width: 100%;
+      min-width: 105px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(100px, 0.55fr) minmax(0, 1.15fr);
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .score-grid p {
+      margin: 0;
+    }
+
+    .score-meaning {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .part-signoff {
+      margin-top: 14px;
+      border-top: 1px dashed var(--line);
+      padding-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    .sign-line {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: var(--soft);
+    }
+
+    .sign-line strong {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .signature-output {
+      min-height: 22px;
+      font-weight: 700;
+    }
+
+    .sidebar-sticky {
+      position: sticky;
+      top: 18px;
+    }
+
+    .summary-box {
+      background: #f8fbff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .summary-box strong {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .summary-big {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--brand);
+      line-height: 1.1;
+    }
+
+    .summary-small {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .ready {
+      background: var(--good);
+    }
+
+    .conditional {
+      background: var(--warn);
+    }
+
+    .notready {
+      background: var(--bad);
+    }
+
+    .pending {
+      background: var(--pending);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      min-height: 48px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
+    }
+
+    .primary {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .secondary {
+      background: #e5edf5;
+      color: var(--ink);
+    }
+
+    .accent {
+      background: var(--accent);
+      color: #1f2937;
+    }
+
+    .footer-note,
+    .autosave-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .download-help {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #fff9ef;
+      border: 1px solid #f2d59d;
+      color: #7b4b04;
+      font-size: 13px;
+    }
+
+    .submit-panel {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #eff7f1;
+      border: 1px solid #bfd8c7;
+    }
+
+    .submit-panel strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--good);
+    }
+
+    .gap-list {
+      margin: 0;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .helper-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .print-only {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .wrap {
+        padding: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        order: -1;
+      }
+
+      .field-row,
+      .helper-grid,
+      .part-signoff,
+      .score-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-sticky {
+        position: static;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .wrap {
+        padding: 12px;
+      }
+
+      .hero,
+      .card {
+        border-radius: 18px;
+        padding: 16px;
+      }
+
+      .hero h1 {
+        font-size: 26px;
+      }
+
+      .card h2 {
+        font-size: 20px;
+      }
+
+      .summary-big {
+        font-size: 25px;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .actions button {
+        width: 100%;
+      }
+
+      table,
+      thead,
+      tbody,
+      tr,
+      th,
+      td {
+        display: block;
+      }
+
+      thead {
+        display: none;
+      }
+
+      table {
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      tbody {
+        display: grid;
+        gap: 12px;
+      }
+
+      tr {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+      }
+
+      td {
+        border: 0;
+        border-bottom: 1px solid var(--soft);
+        padding: 12px 12px 12px 120px;
+        min-height: 52px;
+        position: relative;
+      }
+
+      td:last-child {
+        border-bottom: 0;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 96px;
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.2;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+      }
+
+      td[data-label="Item"],
+      td[data-label="Risk"] {
+        padding-left: 12px;
+      }
+
+      td[data-label="Item"]::before,
+      td[data-label="Risk"]::before {
+        position: static;
+        display: block;
+        width: auto;
+        margin-bottom: 8px;
+      }
+
+      td[data-label="#"] {
+        padding-left: 54px;
+      }
+
+      td[data-label="#"]::before {
+        width: 34px;
+      }
+
+      .part-signoff {
+        gap: 10px;
+      }
+
+      textarea {
+        min-height: 104px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .wrap {
+        max-width: 100%;
+        padding: 0;
+      }
+
+      .hero {
+        color: #000;
+        background: #fff;
+        box-shadow: none;
+        border: 1px solid #999;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar,
+      .actions,
+      .download-help,
+      .autosave-note {
+        display: none !important;
+      }
+
+      .card {
+        box-shadow: none;
+        border: 1px solid #999;
+        break-inside: avoid;
+      }
+
+      input,
+      textarea,
+      select {
+        border: 1px solid #999;
+      }
+
+      .print-only {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="eyebrow">NCIF Mentorship Programme</div>
+      <h1>Tool 3 - Pilot and Product Readiness Assessment</h1>
+      <p>Complete Parts A, B, and C privately, then download your filled assessment or save it as PDF and send it to your mentor.</p>
+      <p>Part B is a self-score only. Mentor scoring and reconciliation happen later in Part D during the private 1-on-1.</p>
+      <div class="privacy-note">
+        <strong>Privacy note:</strong> This assessment is intended to stay private between the innovator and the mentor. Only the file the innovator downloads or sends becomes part of the record.
+      </div>
+    </div>
+
+    <div class="grid">
+      <main>
+        <section class="card">
+          <h2>Participant Details</h2>
+          <p class="section-note">These details will appear on the downloaded assessment so you can identify who submitted it and where it should be sent.</p>
+          <div class="field-row">
+            <div>
+              <label for="innovatorName">Innovator Name</label>
+              <input id="innovatorName" type="text" placeholder="Enter your full name" />
+            </div>
+            <div>
+              <label for="projectName">Project Name</label>
+              <input id="projectName" type="text" placeholder="Enter your innovation or project name" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div>
+              <label for="sessionDate">Session Date</label>
+              <input id="sessionDate" type="date" />
+            </div>
+            <div>
+              <label for="mentorName">Mentor Name</label>
+              <input id="mentorName" type="text" value="Creston Campher" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div>
+              <label for="mentorEmail">Mentor Email</label>
+              <input id="mentorEmail" type="email" value="crestoncampher@gmail.com" />
+            </div>
+            <div>
+              <label for="mentorWhatsApp">Mentor WhatsApp / DM Contact</label>
+              <input id="mentorWhatsApp" type="text" placeholder="Use the number shared in your welcome message" />
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Part A - Pilot Readiness Checklist</h2>
+          <p class="section-note">Select Yes or Not Yet for each official checklist item. Notes are optional, but useful when you review gaps with your mentor.</p>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 14%">Area</th>
+                <th style="width: 38%">Checklist Item</th>
+                <th style="width: 16%">Status</th>
+                <th>Notes / Evidence</th>
+              </tr>
+            </thead>
+            <tbody id="checklistTable"></tbody>
+          </table>
+          <div class="part-signoff">
+            <div class="sign-line">
+              <strong>Part A Innovator Signature</strong>
+              <div class="signature-output" data-signature-output="name">Type your name below to sign all parts.</div>
+            </div>
+            <div class="sign-line">
+              <strong>Part A Signature Date</strong>
+              <div class="signature-output" data-signature-output="date">Select a signature date.</div>
+            </div>
+            <div class="sign-line">
+              <strong>Part A Mentor Signature</strong>
+              <div class="signature-output">To be completed after submission.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Part B - Product Readiness Scorecard</h2>
+          <p class="section-note">Score each dimension from 1 (very weak) to 5 (excellent). This is your self-score only; mentor scoring happens later in Part D.</p>
+          <div id="scorecardContainer"></div>
+          <div class="part-signoff">
+            <div class="sign-line">
+              <strong>Part B Innovator Signature</strong>
+              <div class="signature-output" data-signature-output="name">Type your name below to sign all parts.</div>
+            </div>
+            <div class="sign-line">
+              <strong>Part B Signature Date</strong>
+              <div class="signature-output" data-signature-output="date">Select a signature date.</div>
+            </div>
+            <div class="sign-line">
+              <strong>Part B Mentor Signature</strong>
+              <div class="signature-output">To be completed in Part D.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Part C - Pilot Risk Register</h2>
+          <p class="section-note">List the top 5 risks that could derail your pilot. Add one specific mitigation for each risk that you can act on next.</p>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 6%">#</th>
+                <th style="width: 34%">Risk</th>
+                <th style="width: 14%">Impact</th>
+                <th style="width: 14%">Likelihood</th>
+                <th>Mitigation</th>
+              </tr>
+            </thead>
+            <tbody id="riskTable"></tbody>
+          </table>
+          <div class="part-signoff">
+            <div class="sign-line">
+              <strong>Part C Innovator Signature</strong>
+              <div class="signature-output" data-signature-output="name">Type your name below to sign all parts.</div>
+            </div>
+            <div class="sign-line">
+              <strong>Part C Signature Date</strong>
+              <div class="signature-output" data-signature-output="date">Select a signature date.</div>
+            </div>
+            <div class="sign-line">
+              <strong>Part C Mentor Signature</strong>
+              <div class="signature-output">To be completed after submission.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card print-only">
+          <h2>Submission Summary</h2>
+          <div class="helper-grid">
+            <div class="summary-box">
+              <strong>Checklist</strong>
+              <div id="printChecklistSummary" class="summary-big">0 Yes / 19</div>
+              <div id="printChecklistProgress" class="summary-small">0 answered</div>
+            </div>
+            <div class="summary-box">
+              <strong>Scorecard</strong>
+              <div id="printScoreTotal" class="summary-big">0 / 40</div>
+              <div id="printScoreProgress" class="summary-small">0 of 8 dimensions scored</div>
+            </div>
+          </div>
+          <div class="summary-box">
+            <strong>Readiness Gate</strong>
+            <div id="printReadinessGate"><span class="pill pending">Awaiting Self-Score</span></div>
+            <div id="printReadinessGuidance" class="summary-small">Complete all 8 scorecard dimensions to generate the readiness gate.</div>
+          </div>
+          <div class="summary-box">
+            <strong>Priority Gaps</strong>
+            <div id="printGapSummary" class="gap-list">Complete the checklist and scorecard to see your main gaps.</div>
+          </div>
+          <div class="submit-panel">
+            <strong>Send completed assessment to your mentor</strong>
+            <div id="printSubmitDetails">Use the mentor email or WhatsApp details shown in the participant section.</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Participant Signature</h2>
+          <p class="section-note">Your typed name below will populate the signature lines for Parts A, B, and C.</p>
+          <div class="field-row">
+            <div>
+              <label for="participantSignature">Type your full name as signature</label>
+              <input id="participantSignature" type="text" placeholder="Type your full name" />
+            </div>
+            <div>
+              <label for="signatureDate">Signature Date</label>
+              <input id="signatureDate" type="date" />
+            </div>
+          </div>
+          <div>
+            <label for="mentorAsk">What is the main gap you want help with in your Part D 1-on-1?</label>
+            <textarea id="mentorAsk" placeholder="Example: I need help validating my pilot site, checking compliance requirements, or tightening my budget."></textarea>
+          </div>
+          <p class="footer-note">Recommended sharing method: download the filled assessment for your records, then use Print / Save PDF and send the PDF to your mentor by email or WhatsApp.</p>
+        </section>
+      </main>
+
+      <aside class="sidebar">
+        <div class="sidebar-sticky">
+          <section class="card">
+            <h2>Assessment Summary</h2>
+            <div class="summary-box">
+              <strong>Checklist</strong>
+              <div id="checklistSummary" class="summary-big">0 Yes / 19</div>
+              <div id="checklistProgress" class="summary-small">0 answered</div>
+            </div>
+            <div class="summary-box">
+              <strong>Scorecard</strong>
+              <div id="scoreTotal" class="summary-big">0 / 40</div>
+              <div id="scoreProgress" class="summary-small">0 of 8 dimensions scored</div>
+            </div>
+            <div class="summary-box">
+              <strong>Risk Register</strong>
+              <div id="riskSummary" class="summary-big">0 / 5</div>
+              <div class="summary-small">Risks with both a description and mitigation.</div>
+            </div>
+            <div class="summary-box">
+              <strong>Readiness Gate</strong>
+              <div id="readinessGate"><span class="pill pending">Awaiting Self-Score</span></div>
+            </div>
+            <div class="summary-box">
+              <strong>Action Guidance</strong>
+              <div id="readinessGuidance">Complete all 8 scorecard dimensions to generate the NCIF RED / AMBER / GREEN gate.</div>
+            </div>
+            <div class="summary-box">
+              <strong>Priority Gaps</strong>
+              <div id="gapSummary" class="gap-list">Complete the checklist and scorecard to see your main gaps.</div>
+            </div>
+
+            <div class="actions">
+              <button class="primary" id="printBtn" type="button">Print / Save PDF</button>
+              <button class="accent" id="downloadBtn" type="button">Download Filled HTML</button>
+              <button class="secondary" id="saveBtn" type="button">Save Draft</button>
+              <button class="secondary" id="loadBtn" type="button">Restore Draft</button>
+              <button class="secondary" id="resetBtn" type="button">Reset Form</button>
+            </div>
+
+            <div id="autosaveStatus" class="autosave-note">Changes auto-save on this device.</div>
+
+            <div class="download-help">
+              <strong>Best sharing workflow:</strong> first click <strong>Download Filled HTML</strong> so the innovator keeps a reopenable copy, then click <strong>Print / Save PDF</strong> and send the PDF to the mentor.
+            </div>
+
+            <div class="submit-panel">
+              <strong>Send completed assessment to your mentor</strong>
+              <div id="submitDetails">Use the mentor email or WhatsApp details shown in the participant section.</div>
+            </div>
+          </section>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const checklistItems = [
+      { area: 'Technical', label: 'Prototype has been tested in a realistic use environment.' },
+      { area: 'Technical', label: 'Core functional requirements are documented and met.' },
+      { area: 'Technical', label: 'Failure modes have been identified and addressed.' },
+      { area: 'Technical', label: 'Safety / compliance requirements have been identified.' },
+      { area: 'Technical', label: 'Prototype can be replicated consistently.' },
+      { area: 'Market', label: 'Target user / customer segment is clearly defined.' },
+      { area: 'Market', label: 'Minimum 3 to 5 users / customers have tested the prototype.' },
+      { area: 'Market', label: 'User feedback has been captured and analysed.' },
+      { area: 'Market', label: 'Competitor solutions have been benchmarked.' },
+      { area: 'Market', label: 'A value proposition statement is written and tested.' },
+      { area: 'Operational', label: 'Pilot site(s) have been identified and engaged.' },
+      { area: 'Operational', label: 'Pilot timeline and milestones are documented.' },
+      { area: 'Operational', label: 'Roles and responsibilities for the pilot are assigned.' },
+      { area: 'Operational', label: 'Risk register for the pilot has been started.' },
+      { area: 'Financial', label: 'Pilot budget has been estimated.' },
+      { area: 'Financial', label: 'Funding source(s) for the pilot have been identified.' },
+      { area: 'Financial', label: 'Unit economics (cost per unit / per user) are roughly known.' },
+      { area: 'Financial', label: 'A revenue / sustainability model has been articulated.' },
+      { area: 'Financial', label: 'Post-pilot scale-up cost has been roughly estimated.' }
+    ];
+
+    const scorecardItems = [
+      {
+        label: 'Technical maturity',
+        meaning: 'Prototype works reliably in the intended environment.'
+      },
+      {
+        label: 'Manufacturing / replicability',
+        meaning: 'The product or service can be produced or delivered repeatedly.'
+      },
+      {
+        label: 'Market validation',
+        meaning: 'Users or customers confirm demand and problem-fit.'
+      },
+      {
+        label: 'Operational readiness',
+        meaning: 'Pilot team, partners, site, and timeline are in place.'
+      },
+      {
+        label: 'Financial viability',
+        meaning: 'Budget, funding, and unit economics are understood.'
+      },
+      {
+        label: 'Regulatory / compliance',
+        meaning: 'Applicable standards are known and a compliance path exists.'
+      },
+      {
+        label: 'IP and data protection',
+        meaning: 'IP status and customer data handling are planned.'
+      },
+      {
+        label: 'Team / support capacity',
+        meaning: 'The team and external support can deliver the pilot.'
+      }
+    ];
+
+    const riskRows = 5;
+    const STORAGE_KEY = 'tool3PilotReadinessDataV2';
+
+    const checklistTable = document.getElementById('checklistTable');
+    const scorecardContainer = document.getElementById('scorecardContainer');
+    const riskTable = document.getElementById('riskTable');
+
+    checklistItems.forEach((item, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td data-label="Area">${item.area}</td>
+        <td data-label="Item">${index + 1}. ${item.label}</td>
+        <td data-label="Status">
+          <select id="check-status-${index}" class="mini">
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="notyet">Not Yet</option>
+          </select>
+        </td>
+        <td data-label="Notes">
+          <textarea id="check-note-${index}" placeholder="Optional evidence or note"></textarea>
+        </td>
+      `;
+      checklistTable.appendChild(row);
+    });
+
+    scorecardItems.forEach((item, index) => {
+      const row = document.createElement('div');
+      row.className = 'score-grid';
+      row.innerHTML = `
+        <div>
+          <label for="score-${index}">${index + 1}. ${item.label}</label>
+          <p class="score-meaning">${item.meaning}</p>
+        </div>
+        <div>
+          <label for="score-${index}">Self score</label>
+          <select id="score-${index}" class="score-select">
+            <option value="0">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div>
+          <label for="score-note-${index}">Evidence / Note</label>
+          <textarea id="score-note-${index}" placeholder="Why did you choose this score?"></textarea>
+        </div>
+      `;
+      scorecardContainer.appendChild(row);
+    });
+
+    for (let index = 0; index < riskRows; index += 1) {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td data-label="#">${index + 1}</td>
+        <td data-label="Risk"><textarea id="risk-desc-${index}" placeholder="Describe the risk in one sentence"></textarea></td>
+        <td data-label="Impact">
+          <select id="risk-impact-${index}" class="mini">
+            <option value="">Select</option>
+            <option value="H">H</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+          </select>
+        </td>
+        <td data-label="Likelihood">
+          <select id="risk-like-${index}" class="mini">
+            <option value="">Select</option>
+            <option value="H">H</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+          </select>
+        </td>
+        <td data-label="Mitigation"><textarea id="risk-mit-${index}" placeholder="Add one specific mitigation"></textarea></td>
+      `;
+      riskTable.appendChild(row);
+    }
+
+    function getLocalDateValue() {
+      const now = new Date();
+      const local = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+      return local.toISOString().slice(0, 10);
+    }
+
+    function getReadinessGate(scoreTotal, answeredCount) {
+      if (answeredCount < scorecardItems.length) {
+        return {
+          className: 'pending',
+          label: 'Awaiting Self-Score',
+          guidance: 'Complete all 8 scorecard dimensions to generate the NCIF RED / AMBER / GREEN gate.'
+        };
+      }
+
+      if (scoreTotal < 20) {
+        return {
+          className: 'notready',
+          label: 'RED - Significant Gaps',
+          guidance: 'Your current score is below 20/40. Focus on the top 2 gaps and agree a 7-day action plan in Part D.'
+        };
+      }
+
+      if (scoreTotal < 30) {
+        return {
+          className: 'conditional',
+          label: 'AMBER - Conditional Pilot',
+          guidance: 'You appear pilot-capable with targeted improvements. Use Part D to close the highest-risk gaps quickly.'
+        };
+      }
+
+      return {
+        className: 'ready',
+        label: 'GREEN - Pilot Ready',
+        guidance: 'You appear pilot-ready. Use Part D to confirm evidence, tighten weak spots, and discuss scale-up or funding.'
+      };
+    }
+
+    function setText(id, value) {
+      const node = document.getElementById(id);
+      if (node) node.textContent = value;
+    }
+
+    function setHtml(id, value) {
+      const node = document.getElementById(id);
+      if (node) node.innerHTML = value;
+    }
+
+    function updateSignatureOutputs() {
+      const name = document.getElementById('participantSignature').value.trim();
+      const date = document.getElementById('signatureDate').value.trim();
+
+      document.querySelectorAll('[data-signature-output="name"]').forEach((node) => {
+        node.textContent = name || 'Type your name below to sign all parts.';
+      });
+
+      document.querySelectorAll('[data-signature-output="date"]').forEach((node) => {
+        node.textContent = date || 'Select a signature date.';
+      });
+    }
+
+    function buildGapSummary() {
+      const lowestScores = scorecardItems
+        .map((item, index) => ({
+          label: item.label,
+          score: Number(document.getElementById(`score-${index}`).value || 0)
+        }))
+        .filter((item) => item.score > 0)
+        .sort((left, right) => left.score - right.score)
+        .slice(0, 3);
+
+      const checklistGaps = checklistItems
+        .map((item, index) => ({
+          area: item.area,
+          label: item.label,
+          status: document.getElementById(`check-status-${index}`).value
+        }))
+        .filter((item) => item.status === 'notyet');
+
+      const parts = [];
+
+      if (lowestScores.length) {
+        parts.push(`Lowest score areas: ${lowestScores.map((item) => `${item.label} (${item.score}/5)`).join('; ')}.`);
+      }
+
+      if (checklistGaps.length) {
+        const priorityChecklist = checklistGaps.slice(0, 2).map((item) => `${item.area}: ${item.label}`);
+        parts.push(`${checklistGaps.length} checklist items are marked Not Yet. Priority examples: ${priorityChecklist.join('; ')}.`);
+      }
+
+      if (!parts.length) {
+        return 'Complete the checklist and scorecard to see your main gaps.';
+      }
+
+      return parts.join(' ');
+    }
+
+    function updateSubmissionDetails() {
+      const mentorName = document.getElementById('mentorName').value.trim() || 'your mentor';
+      const mentorEmail = document.getElementById('mentorEmail').value.trim();
+      const mentorWhatsApp = document.getElementById('mentorWhatsApp').value.trim();
+
+      const details = [];
+      if (mentorEmail) details.push(`Email ${mentorName}: ${mentorEmail}`);
+      if (mentorWhatsApp) details.push(`WhatsApp / DM: ${mentorWhatsApp}`);
+      if (!mentorEmail && !mentorWhatsApp) details.push('Use the contact details your mentor shared with you.');
+
+      const text = details.join(' | ');
+      setText('submitDetails', text);
+      setText('printSubmitDetails', text);
+    }
+
+    function updateSummary() {
+      const checklistStatuses = checklistItems.map((_, index) => document.getElementById(`check-status-${index}`).value);
+      const checklistYes = checklistStatuses.filter((value) => value === 'yes').length;
+      const checklistAnswered = checklistStatuses.filter(Boolean).length;
+
+      const scoreValues = scorecardItems.map((_, index) => Number(document.getElementById(`score-${index}`).value || 0));
+      const scoreAnswered = scoreValues.filter((value) => value > 0).length;
+      const scoreTotal = scoreValues.reduce((sum, value) => sum + value, 0);
+
+      const completedRisks = Array.from({ length: riskRows }).filter((_, index) => {
+        const desc = document.getElementById(`risk-desc-${index}`).value.trim();
+        const mitigation = document.getElementById(`risk-mit-${index}`).value.trim();
+        return desc && mitigation;
+      }).length;
+
+      const readiness = getReadinessGate(scoreTotal, scoreAnswered);
+      const gapSummary = buildGapSummary();
+
+      setText('checklistSummary', `${checklistYes} Yes / ${checklistItems.length}`);
+      setText('checklistProgress', `${checklistAnswered} answered`);
+      setText('scoreTotal', `${scoreTotal} / 40`);
+      setText('scoreProgress', `${scoreAnswered} of ${scorecardItems.length} dimensions scored`);
+      setText('riskSummary', `${completedRisks} / ${riskRows}`);
+      setHtml('readinessGate', `<span class="pill ${readiness.className}">${readiness.label}</span>`);
+      setText('readinessGuidance', readiness.guidance);
+      setText('gapSummary', gapSummary);
+
+      setText('printChecklistSummary', `${checklistYes} Yes / ${checklistItems.length}`);
+      setText('printChecklistProgress', `${checklistAnswered} answered`);
+      setText('printScoreTotal', `${scoreTotal} / 40`);
+      setText('printScoreProgress', `${scoreAnswered} of ${scorecardItems.length} dimensions scored`);
+      setHtml('printReadinessGate', `<span class="pill ${readiness.className}">${readiness.label}</span>`);
+      setText('printReadinessGuidance', readiness.guidance);
+      setText('printGapSummary', gapSummary);
+
+      updateSignatureOutputs();
+      updateSubmissionDetails();
+    }
+
+    function getFormData() {
+      const data = {};
+      document.querySelectorAll('input, textarea, select').forEach((element) => {
+        if (element.id) data[element.id] = element.value;
+      });
+      return data;
+    }
+
+    function setFormData(data) {
+      document.querySelectorAll('input, textarea, select').forEach((element) => {
+        if (element.id && Object.prototype.hasOwnProperty.call(data, element.id)) {
+          element.value = data[element.id];
+        }
+      });
+      updateSummary();
+    }
+
+    function setAutosaveStatus(message) {
+      setText('autosaveStatus', message);
+    }
+
+    function saveDraft(message = 'Draft saved on this device.') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormData()));
+      setAutosaveStatus(message);
+    }
+
+    function restoreDraft(showMessage = true) {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        if (showMessage) {
+          alert('No saved draft was found on this device.');
+        }
+        return false;
+      }
+
+      try {
+        setFormData(JSON.parse(raw));
+        setAutosaveStatus('Saved draft restored from this device.');
+        if (showMessage) {
+          alert('Saved draft restored.');
+        }
+        return true;
+      } catch (error) {
+        if (showMessage) {
+          alert('The saved draft could not be restored.');
+        }
+        setAutosaveStatus('Saved draft could not be restored.');
+        return false;
+      }
+    }
+
+    function buildFileName(extension) {
+      const innovator = (document.getElementById('innovatorName').value.trim() || 'innovator').toLowerCase();
+      const project = (document.getElementById('projectName').value.trim() || 'tool-3').toLowerCase();
+      const safeName = `${innovator}-${project}`
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 80) || 'tool-3-assessment';
+
+      return `${safeName}.${extension}`;
+    }
+
+    function syncClonedControls(cloneRoot) {
+      const liveControls = document.querySelectorAll('input, textarea, select');
+      const cloneControls = cloneRoot.querySelectorAll('input, textarea, select');
+
+      liveControls.forEach((liveControl, index) => {
+        const cloneControl = cloneControls[index];
+        if (!cloneControl) return;
+
+        if (liveControl.tagName === 'TEXTAREA') {
+          cloneControl.textContent = liveControl.value;
+          cloneControl.value = liveControl.value;
+          return;
+        }
+
+        if (liveControl.tagName === 'SELECT') {
+          Array.from(cloneControl.options).forEach((option, optionIndex) => {
+            if (optionIndex === liveControl.selectedIndex) {
+              option.setAttribute('selected', 'selected');
+            } else {
+              option.removeAttribute('selected');
+            }
+          });
+          cloneControl.value = liveControl.value;
+          return;
+        }
+
+        cloneControl.setAttribute('value', liveControl.value);
+        cloneControl.value = liveControl.value;
+      });
+    }
+
+    function downloadFilledHtml() {
+      updateSummary();
+      saveDraft('Draft saved and download prepared.');
+
+      const clone = document.documentElement.cloneNode(true);
+      syncClonedControls(clone);
+
+      const blob = new Blob([`<!DOCTYPE html>\n${clone.outerHTML}`], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = buildFileName('html');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      setAutosaveStatus('Filled assessment downloaded as HTML.');
+    }
+
+    let autosaveTimer;
+    function queueAutosave() {
+      window.clearTimeout(autosaveTimer);
+      autosaveTimer = window.setTimeout(() => {
+        saveDraft('Changes auto-saved on this device.');
+      }, 250);
+    }
+
+    document.addEventListener('input', () => {
+      updateSummary();
+      queueAutosave();
+    });
+
+    document.addEventListener('change', () => {
+      updateSummary();
+      queueAutosave();
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      saveDraft('Draft saved on this device.');
+      alert('Draft saved on this device.');
+    });
+
+    document.getElementById('loadBtn').addEventListener('click', () => {
+      restoreDraft(true);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (!confirm('Clear all fields in this assessment?')) return;
+
+      document.querySelectorAll('input, textarea, select').forEach((element) => {
+        if (element.tagName === 'SELECT') {
+          element.selectedIndex = 0;
+        } else {
+          element.value = '';
+        }
+      });
+
+      const today = getLocalDateValue();
+      document.getElementById('sessionDate').value = today;
+      document.getElementById('signatureDate').value = today;
+      document.getElementById('mentorName').value = 'Creston Campher';
+      document.getElementById('mentorEmail').value = 'crestoncampher@gmail.com';
+
+      localStorage.removeItem(STORAGE_KEY);
+      setAutosaveStatus('Form cleared. Local draft removed from this device.');
+      updateSummary();
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => {
+      updateSummary();
+      saveDraft('Draft saved before print.');
+      window.print();
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', downloadFilledHtml);
+
+    function hasExistingResponses() {
+      if (document.getElementById('innovatorName').value.trim()) return true;
+      if (document.getElementById('projectName').value.trim()) return true;
+      if (document.getElementById('participantSignature').value.trim()) return true;
+      if (document.getElementById('mentorAsk').value.trim()) return true;
+
+      for (let index = 0; index < checklistItems.length; index += 1) {
+        if (document.getElementById(`check-status-${index}`).value) return true;
+        if (document.getElementById(`check-note-${index}`).value.trim()) return true;
+      }
+
+      for (let index = 0; index < scorecardItems.length; index += 1) {
+        if (Number(document.getElementById(`score-${index}`).value || 0) > 0) return true;
+        if (document.getElementById(`score-note-${index}`).value.trim()) return true;
+      }
+
+      for (let index = 0; index < riskRows; index += 1) {
+        if (document.getElementById(`risk-desc-${index}`).value.trim()) return true;
+        if (document.getElementById(`risk-impact-${index}`).value) return true;
+        if (document.getElementById(`risk-like-${index}`).value) return true;
+        if (document.getElementById(`risk-mit-${index}`).value.trim()) return true;
+      }
+
+      return false;
+    }
+
+    const today = getLocalDateValue();
+    if (!document.getElementById('sessionDate').value) {
+      document.getElementById('sessionDate').value = today;
+    }
+    if (!document.getElementById('signatureDate').value) {
+      document.getElementById('signatureDate').value = today;
+    }
+
+    if (!hasExistingResponses()) {
+      restoreDraft(false);
+    }
+    updateSummary();
+  </script>
+</body>
+</html>
